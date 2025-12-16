@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Task } from "@/types/taskType";
 import { getTasks, saveTasks } from "@/storage/taskStorage";
 import AddTask from "./components/AddTask";
@@ -10,10 +10,13 @@ import DeleteConfirmModal from "./components/DeleteConfirmModal";
 import Toast from "./components/Toast";
 
 function App() {
-  const [tasks, setTasks] = useState<Task[]>(() => {
-    if (typeof window === "undefined") return [];
-    return getTasks();
-  });
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    setTasks(getTasks());
+  }, []);
   const [search, setSearch] = useState("");
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [statusFilter, setStatusFilter] = useState<
@@ -168,15 +171,16 @@ function App() {
     return result;
   }, [tasks, search, statusFilter, priorityFilter, sortBy, sortOrder]);
 
-  // Estatísticas
   const stats = useMemo(() => {
+    if (!isMounted)
+      return { total: 0, completed: 0, pending: 0, highPriority: 0 };
     const total = tasks.length;
     const completed = tasks.filter((t) => t.status === "completed").length;
     const pending = total - completed;
     const highPriority = tasks.filter((t) => t.priority === "high").length;
 
     return { total, completed, pending, highPriority };
-  }, [tasks]);
+  }, [tasks, isMounted]);
 
   return (
     <main className="flex min-h-screen items-start justify-center px-3 py-6 sm:px-6 lg:px-8">

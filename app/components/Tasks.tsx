@@ -59,7 +59,7 @@ function Tasks({ tasks, onTaskClick, deleteTask, onEditClick }: TasksProps) {
           </Link>
           <button
             type="button"
-            className="rounded bg-slate-500/80 px-3 py-2 text-white text-sm font-medium transition hover:bg-slate-600 sm:self-stretch"
+            className="rounded bg-blue-500 px-3 py-2 text-white text-sm font-medium transition hover:bg-blue-600 sm:self-stretch"
             onClick={() => onEditClick(t.id)}
           >
             Editar

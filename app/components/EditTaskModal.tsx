@@ -23,10 +23,8 @@ function EditTaskModal({ task, open, onClose, onSave }: EditTaskModalProps) {
   );
   const [dueDate, setDueDate] = useState(task?.dueDate ?? "");
 
-  // Sincronizar campos quando task muda (usando setTimeout para evitar warning)
   useEffect(() => {
     if (!task || !open) return;
-    // Usar setTimeout para evitar warning de setState síncrono
     const timer = setTimeout(() => {
       setTitle(task.title);
       setDescription(task.description ?? "");
@@ -34,7 +32,6 @@ function EditTaskModal({ task, open, onClose, onSave }: EditTaskModalProps) {
       setDueDate(task.dueDate ?? "");
     }, 0);
     return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [task?.id, open]);
 
   if (!open || !task) return null;

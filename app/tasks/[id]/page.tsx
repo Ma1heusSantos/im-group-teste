@@ -42,7 +42,6 @@ function TaskDetailPage() {
 
     saveTasks(updatedTasks);
     setEditingTask(null);
-    // Recarregar a página para mostrar as mudanças
     router.refresh();
   }
 
