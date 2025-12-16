@@ -151,6 +151,16 @@ function TaskDetailPage() {
                 : new Date(task.dueDate).toISOString().split("T")[0]}
             </span>
           )}
+          {task.category && (
+            <span className="inline-flex items-center rounded-full bg-blue-500/15 px-2.5 py-1 font-medium capitalize text-blue-600 dark:text-blue-400">
+              📁 {task.category}
+            </span>
+          )}
+          {task.urgency && (
+            <span className="inline-flex items-center rounded-full bg-orange-500/15 px-2.5 py-1 font-medium capitalize text-orange-600 dark:text-orange-400">
+              ⚡ {task.urgency}
+            </span>
+          )}
         </div>
 
         {task.description && (
@@ -161,6 +171,36 @@ function TaskDetailPage() {
             <p className="whitespace-pre-line leading-relaxed">
               {task.description}
             </p>
+          </section>
+        )}
+
+        {(task.category || task.urgency) && (
+          <section className="mb-4 rounded-md app-surface p-3 text-sm">
+            <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide app-muted">
+              Análise da IA
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              {task.category && (
+                <div className="rounded-md bg-blue-500/10 px-3 py-2">
+                  <p className="text-[10px] font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400">
+                    Categoria
+                  </p>
+                  <p className="mt-0.5 capitalize text-blue-700 dark:text-blue-300">
+                    📁 {task.category}
+                  </p>
+                </div>
+              )}
+              {task.urgency && (
+                <div className="rounded-md bg-orange-500/10 px-3 py-2">
+                  <p className="text-[10px] font-semibold uppercase tracking-wide text-orange-600 dark:text-orange-400">
+                    Urgência
+                  </p>
+                  <p className="mt-0.5 capitalize text-orange-700 dark:text-orange-300">
+                    ⚡ {task.urgency}
+                  </p>
+                </div>
+              )}
+            </div>
           </section>
         )}
 

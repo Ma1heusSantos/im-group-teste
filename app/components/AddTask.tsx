@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { analyzeTaskWithAI, type AISuggestion } from "@/app/services/aiService";
 
 type AddTaskProps = {
   onAddTask: (data: {
@@ -8,6 +9,8 @@ type AddTaskProps = {
     description: string;
     priority: "low" | "medium" | "high";
     dueDate?: string;
+    category?: string;
+    urgency?: string;
   }) => void;
   search: string;
   onSearchChange: (value: string) => void;
@@ -39,6 +42,31 @@ function AddTask({
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState<"low" | "medium" | "high">("medium");
   const [dueDate, setDueDate] = useState("");
+  const [aiSuggestion, setAiSuggestion] = useState<AISuggestion | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [category, setCategory] = useState("");
+
+  const handleAnalyzeWithAI = async () => {
+    if (!title.trim()) return;
+
+    setIsAnalyzing(true);
+    try {
+      const suggestion = await analyzeTaskWithAI(title, description);
+      setAiSuggestion(suggestion);
+      setPriority(suggestion.priority);
+      setCategory(suggestion.category);
+    } catch (error) {
+      console.error("Erro ao analisar com IA:", error);
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
+  const handleApplySuggestion = () => {
+    if (!aiSuggestion) return;
+    setPriority(aiSuggestion.priority);
+    setCategory(aiSuggestion.category);
+  };
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -50,12 +78,16 @@ function AddTask({
       description: description.trim(),
       priority,
       dueDate: dueDate || undefined,
+      category: category || undefined,
+      urgency: aiSuggestion?.urgency || undefined,
     });
 
     setTitle("");
     setDescription("");
     setPriority("medium");
     setDueDate("");
+    setCategory("");
+    setAiSuggestion(null);
     setIsModalOpen(false);
   };
 
@@ -154,7 +186,28 @@ function AddTask({
               </div>
 
               <div className="space-y-1">
-                <label className="block text-sm font-medium">Descrição</label>
+                <div className="flex items-center justify-between">
+                  <label className="block text-sm font-medium">Descrição</label>
+                  <button
+                    type="button"
+                    onClick={handleAnalyzeWithAI}
+                    disabled={!title.trim() || isAnalyzing}
+                    className="flex items-center gap-1 rounded-md bg-purple-500 px-2 py-1 text-xs font-medium text-white transition hover:bg-purple-600 disabled:cursor-not-allowed disabled:opacity-50"
+                    title="Analisar tarefa com IA"
+                  >
+                    {isAnalyzing ? (
+                      <>
+                        <span className="animate-spin">⏳</span>
+                        Analisando...
+                      </>
+                    ) : (
+                      <>
+                        <span>🤖</span>
+                        Analisar com IA
+                      </>
+                    )}
+                  </button>
+                </div>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
@@ -163,6 +216,60 @@ function AddTask({
                   placeholder="Detalhe a tarefa (opcional)"
                 />
               </div>
+
+              {aiSuggestion && (
+                <div className="rounded-lg border-2 border-purple-500/30 bg-purple-50/50 p-3 dark:bg-purple-900/20">
+                  <div className="mb-2 flex items-center justify-between">
+                    <h3 className="text-sm font-semibold text-purple-700 dark:text-purple-300">
+                      💡 Sugestão da IA
+                    </h3>
+                    <button
+                      type="button"
+                      onClick={handleApplySuggestion}
+                      className="text-xs text-purple-600 underline hover:text-purple-800 dark:text-purple-400"
+                    >
+                      Aplicar
+                    </button>
+                  </div>
+                  <div className="space-y-1.5 text-xs">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">Prioridade:</span>
+                      <span
+                        className={`rounded-full px-2 py-0.5 font-medium ${
+                          aiSuggestion.priority === "high"
+                            ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300"
+                            : aiSuggestion.priority === "medium"
+                            ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300"
+                            : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300"
+                        }`}
+                      >
+                        {aiSuggestion.priority === "high"
+                          ? "Alta"
+                          : aiSuggestion.priority === "medium"
+                          ? "Média"
+                          : "Baixa"}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">Categoria:</span>
+                      <span className="rounded-full bg-blue-100 px-2 py-0.5 font-medium capitalize text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+                        {aiSuggestion.category}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">Urgência:</span>
+                      <span className="rounded-full bg-orange-100 px-2 py-0.5 font-medium capitalize text-orange-700 dark:bg-orange-900/30 dark:text-orange-300">
+                        {aiSuggestion.urgency}
+                      </span>
+                    </div>
+                    {aiSuggestion.reasoning && (
+                      <p className="mt-2 text-xs italic text-slate-600 dark:text-slate-400">
+                        {aiSuggestion.reasoning}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
 
               <div className="flex flex-col gap-3 sm:flex-row">
                 <div className="flex-1 space-y-1">

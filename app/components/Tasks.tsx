@@ -32,28 +32,44 @@ function Tasks({ tasks, onTaskClick, deleteTask, onEditClick }: TasksProps) {
                 : "bg-emerald-500/90 hover:bg-emerald-600"
             } ${t.status === "completed" ? "line-through opacity-60" : ""}`}
           >
-            <div className="flex items-center justify-between gap-2">
-              <span className="truncate">{t.title}</span>
-              <span
-                className={`inline-flex shrink-0 items-center rounded-full px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide ${
-                  t.priority === "high"
-                    ? "bg-white/15 text-red-50"
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center justify-between gap-2">
+                <span className="truncate">{t.title}</span>
+                <span
+                  className={`inline-flex shrink-0 items-center rounded-full px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide ${
+                    t.priority === "high"
+                      ? "bg-white/15 text-red-50"
+                      : t.priority === "medium"
+                      ? "bg-white/15 text-amber-50"
+                      : "bg-white/15 text-emerald-50"
+                  }`}
+                >
+                  {t.priority === "high"
+                    ? "Alta"
                     : t.priority === "medium"
-                    ? "bg-white/15 text-amber-50"
-                    : "bg-white/15 text-emerald-50"
-                }`}
-              >
-                {t.priority === "high"
-                  ? "Alta"
-                  : t.priority === "medium"
-                  ? "Média"
-                  : "Baixa"}
-              </span>
+                    ? "Média"
+                    : "Baixa"}
+                </span>
+              </div>
+              {(t.category || t.urgency) && (
+                <div className="flex gap-1.5 text-[10px] opacity-80">
+                  {t.category && (
+                    <span className="rounded bg-white/10 px-1.5 py-0.5 capitalize">
+                      📁 {t.category}
+                    </span>
+                  )}
+                  {t.urgency && (
+                    <span className="rounded bg-white/10 px-1.5 py-0.5 capitalize">
+                      ⚡ {t.urgency}
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
           </button>
           <Link
             href={`/tasks/${t.id}`}
-            className="rounded bg-slate-500/80 px-3 py-2 text-center text-sm font-medium text-white transition hover:bg-slate-600 sm:self-stretch"
+            className="rounded bg-slate-500/80 px-3 py-5 text-sm text-center font-medium text-white transition hover:bg-slate-600 sm:self-stretch"
           >
             Detalhes
           </Link>

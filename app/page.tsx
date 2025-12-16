@@ -17,6 +17,7 @@ function App() {
     setIsMounted(true);
     setTasks(getTasks());
   }, []);
+
   const [search, setSearch] = useState("");
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [statusFilter, setStatusFilter] = useState<
@@ -43,6 +44,8 @@ function App() {
     description: string;
     priority: "low" | "medium" | "high";
     dueDate?: string;
+    category?: string;
+    urgency?: string;
   }) {
     const newTask: Task = {
       id: crypto.randomUUID(),
@@ -52,6 +55,8 @@ function App() {
       status: "pending",
       createdAt: new Date().toISOString(),
       dueDate: data.dueDate,
+      category: data.category,
+      urgency: data.urgency,
     };
 
     const updatedTasks = [...tasks, newTask];
@@ -141,7 +146,6 @@ function App() {
       return matchesSearch && matchesStatus && matchesPriority;
     });
 
-    // Ordenação
     result = [...result].sort((a, b) => {
       let comparison = 0;
 
@@ -182,6 +186,29 @@ function App() {
     return { total, completed, pending, highPriority };
   }, [tasks, isMounted]);
 
+  if (!isMounted) {
+    return (
+      <main className="flex min-h-screen items-start justify-center px-3 py-6 sm:px-6 lg:px-8">
+        <div className="w-full max-w-xl rounded-2xl app-card p-4 shadow-xl backdrop-blur-sm sm:p-6">
+          <header className="flex items-center justify-between gap-3">
+            <div>
+              <h1 className="text-balance text-2xl font-semibold sm:text-3xl">
+                To Do List
+              </h1>
+              <p className="mt-1 text-xs app-muted">Carregando...</p>
+            </div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-slate-500/40 bg-black/5 px-3 py-1 text-xs font-medium text-slate-100 shadow-sm backdrop-blur-sm">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-black/40">
+                ☀️
+              </span>
+              <span className="hidden sm:inline">Claro</span>
+            </div>
+          </header>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="flex min-h-screen items-start justify-center px-3 py-6 sm:px-6 lg:px-8">
       <div className="w-full max-w-xl rounded-2xl app-card p-4 shadow-xl backdrop-blur-sm sm:p-6">
@@ -190,7 +217,7 @@ function App() {
             <h1 className="text-balance text-2xl font-semibold sm:text-3xl">
               To Do List
             </h1>
-            <p className="mt-1 text-xs app-muted" suppressHydrationWarning>
+            <p className="mt-1 text-xs app-muted">
               {stats.total} tarefa{stats.total !== 1 ? "s" : ""} •{" "}
               {stats.completed} concluída{stats.completed !== 1 ? "s" : ""} •{" "}
               {stats.pending} pendente{stats.pending !== 1 ? "s" : ""}

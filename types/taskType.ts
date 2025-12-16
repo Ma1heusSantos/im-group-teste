@@ -7,4 +7,6 @@ export interface Task {
   createdAt: string;
   dueDate?: string;
   completedAt?: string;
+  category?: string;
+  urgency?: string;
 }
