@@ -18,16 +18,40 @@ function getInitialTheme(): Theme {
 }
 
 function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>(() => getInitialTheme());
+  const [theme, setTheme] = useState<Theme>("light");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (typeof document === "undefined") return;
+    setMounted(true);
+    const initialTheme = getInitialTheme();
+    setTheme(initialTheme);
+    document.documentElement.setAttribute("data-theme", initialTheme);
+  }, []);
 
+  useEffect(() => {
+    if (!mounted) return;
     document.documentElement.setAttribute("data-theme", theme);
     window.localStorage.setItem("theme", theme);
-  }, [theme]);
+  }, [theme, mounted]);
 
   const isDark = theme === "dark";
+  if (!mounted) {
+    return (
+      <button
+        type="button"
+        className="inline-flex items-center gap-2 rounded-full border border-slate-500/40 bg-black/5 px-3 py-1 text-xs font-medium text-slate-100 shadow-sm backdrop-blur-sm transition hover:border-slate-300/70 hover:bg-black/10"
+        aria-label="Carregando tema"
+      >
+        <span
+          className="flex h-5 w-5 items-center justify-center rounded-full bg-black/40"
+          aria-hidden="true"
+        >
+          ☀️
+        </span>
+        <span className="hidden sm:inline">Claro</span>
+      </button>
+    );
+  }
 
   return (
     <button
