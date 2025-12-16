@@ -38,9 +38,9 @@ npm run dev
 - `npm run start` - Inicia servidor de produção
 - `npm run lint` - Executa o linter
 
-## ✨ Funcionalidades
+## Funcionalidades
 
-### 📝 CRUD de Tarefas
+### CRUD de Tarefas
 
 - **Criar tarefa** com título, descrição, prioridade e data opcional
 - **Listar tarefas** com visual organizado e responsivo
@@ -48,7 +48,7 @@ npm run dev
 - **Excluir tarefas** com confirmação de segurança
 - **Marcar/desmarcar como concluída** com um clique
 
-### 🔍 Filtros e Busca
+###  Filtros e Busca
 
 - Filtrar por **status** (todas/pendentes/concluídas)
 - Filtrar por **prioridade** (todas/baixa/média/alta)
@@ -57,13 +57,13 @@ npm run dev
 - **Ordenação** por data de criação, prioridade, título ou prazo
 - Ordenação **crescente/decrescente**
 
-### 💾 Persistência
+### Persistência
 
 - Salva tarefas no **localStorage**
 - Carrega automaticamente ao iniciar
 - Mantém dados após refresh da página
 
-### 🎨 UX/Design
+###  UX/Design
 
 - Interface **limpa e responsiva** (mobile-first)
 - Visual diferenciado para tarefas **concluídas**
@@ -73,14 +73,14 @@ npm run dev
 - **Contador de tarefas** no cabeçalho
 - **Estatísticas** (total, concluídas, pendentes)
 
-### 📄 Página de Detalhes
+###  Página de Detalhes
 
 - Visualização completa da tarefa
 - Informações de criação e conclusão
 - Edição direta da página de detalhes
 - Navegação intuitiva
 
-## 🏗️ Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 app/
@@ -105,7 +105,7 @@ types/
 └── taskType.ts               # Tipos TypeScript
 ```
 
-## 🛠️ Tecnologias
+## Tecnologias
 
 - **Next.js 15.1.6** - Framework React
 - **React 18.3.1** - Biblioteca UI
@@ -113,15 +113,7 @@ types/
 - **Tailwind CSS 4.0.9** - Estilização
 - **localStorage** - Persistência de dados
 
-## 📱 Responsividade
-
-A aplicação é totalmente responsiva e funciona perfeitamente em:
-
-- 📱 Mobile (320px+)
-- 📱 Tablet (768px+)
-- 💻 Desktop (1024px+)
-
-## 🎯 Funcionalidades Bônus Implementadas
+## Funcionalidades Bônus Implementadas
 
 - **Modo claro/escuro** com persistência
 - **Contador de tarefas** no header
@@ -130,14 +122,14 @@ A aplicação é totalmente responsiva e funciona perfeitamente em:
 - **Feedback visual** com toasts
 - **Confirmação de exclusão** com modal
 
-## 📝 Notas
+## Notas
 
 - Todos os dados são salvos no `localStorage` do navegador
 - O tema escolhido é persistido entre sessões
 - A aplicação não requer backend ou banco de dados
 - Compatível com todos os navegadores modernos
 
-## 👨‍💻 Desenvolvido com
+## Desenvolvido com
 
 - ❤️ React
 - ⚡ Next.js
