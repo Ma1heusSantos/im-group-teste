@@ -2,7 +2,7 @@
 
 Aplicação web moderna para gerenciamento de tarefas desenvolvida com **Next.js 15**, **React 18**, **TypeScript** e **Tailwind CSS**.
 
-## 🚀 Como rodar o projeto
+## Como rodar o projeto
 
 ### Pré-requisitos
 
@@ -131,7 +131,7 @@ types/
 
 ## Desenvolvido com
 
-- ❤️ React
-- ⚡ Next.js
-- 🎨 Tailwind CSS
-- 📘 TypeScript
+-  React
+-  Next.js
+-  Tailwind CSS
+-  TypeScript
