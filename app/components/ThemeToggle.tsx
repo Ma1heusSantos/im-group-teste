@@ -41,6 +41,7 @@ function ThemeToggle() {
         type="button"
         className="inline-flex items-center gap-2 rounded-full border border-slate-500/40 bg-black/5 px-3 py-1 text-xs font-medium text-slate-100 shadow-sm backdrop-blur-sm transition hover:border-slate-300/70 hover:bg-black/10"
         aria-label="Carregando tema"
+        suppressHydrationWarning
       >
         <span
           className="flex h-5 w-5 items-center justify-center rounded-full bg-black/40"
@@ -48,7 +49,9 @@ function ThemeToggle() {
         >
           ☀️
         </span>
-        <span className="hidden sm:inline">Claro</span>
+        <span className="hidden sm:inline" suppressHydrationWarning>
+          Claro
+        </span>
       </button>
     );
   }
@@ -59,14 +62,18 @@ function ThemeToggle() {
       onClick={() => setTheme(isDark ? "light" : "dark")}
       className="inline-flex items-center gap-2 rounded-full border border-slate-500/40 bg-black/5 px-3 py-1 text-xs font-medium text-slate-100 shadow-sm backdrop-blur-sm transition hover:border-slate-300/70 hover:bg-black/10"
       aria-label={isDark ? "Ativar modo claro" : "Ativar modo escuro"}
+      suppressHydrationWarning
     >
       <span
         className="flex h-5 w-5 items-center justify-center rounded-full bg-black/40"
         aria-hidden="true"
+        suppressHydrationWarning
       >
         {isDark ? "🌙" : "☀️"}
       </span>
-      <span className="hidden sm:inline">{isDark ? "Escuro" : "Claro"}</span>
+      <span className="hidden sm:inline" suppressHydrationWarning>
+        {isDark ? "Escuro" : "Claro"}
+      </span>
     </button>
   );
 }

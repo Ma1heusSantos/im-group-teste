@@ -190,7 +190,7 @@ function App() {
             <h1 className="text-balance text-2xl font-semibold sm:text-3xl">
               To Do List
             </h1>
-            <p className="mt-1 text-xs app-muted">
+            <p className="mt-1 text-xs app-muted" suppressHydrationWarning>
               {stats.total} tarefa{stats.total !== 1 ? "s" : ""} •{" "}
               {stats.completed} concluída{stats.completed !== 1 ? "s" : ""} •{" "}
               {stats.pending} pendente{stats.pending !== 1 ? "s" : ""}

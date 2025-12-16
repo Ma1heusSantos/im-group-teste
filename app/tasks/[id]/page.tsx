@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import type { Task } from "@/types/taskType";
 import { getTasks, saveTasks } from "@/storage/taskStorage";
@@ -10,12 +10,17 @@ function TaskDetailPage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const task = useMemo<Task | null>(() => {
-    if (typeof window === "undefined") return null;
+    if (typeof window === "undefined" || !mounted) return null;
     const allTasks = getTasks();
     return allTasks.find((t) => t.id === params.id) ?? null;
-  }, [params.id]);
+  }, [params.id, mounted]);
 
   const notFound = task === null;
 
@@ -103,8 +108,11 @@ function TaskDetailPage() {
             >
               Editar
             </button>
-            <span className="text-xs app-muted">
-              Criada em {new Date(task.createdAt).toLocaleDateString("pt-BR")}
+            <span className="text-xs app-muted" suppressHydrationWarning>
+              Criada em{" "}
+              {mounted
+                ? new Date(task.createdAt).toLocaleDateString("pt-BR")
+                : new Date(task.createdAt).toISOString().split("T")[0]}
             </span>
           </div>
         </div>
@@ -133,8 +141,14 @@ function TaskDetailPage() {
             Prioridade: {priorityLabel}
           </span>
           {task.dueDate && (
-            <span className="inline-flex items-center rounded-full bg-slate-500/10 px-2.5 py-1 font-medium text-slate-500">
-              Prazo: {new Date(task.dueDate).toLocaleDateString("pt-BR")}
+            <span
+              className="inline-flex items-center rounded-full bg-slate-500/10 px-2.5 py-1 font-medium text-slate-500"
+              suppressHydrationWarning
+            >
+              Prazo:{" "}
+              {mounted
+                ? new Date(task.dueDate).toLocaleDateString("pt-BR")
+                : new Date(task.dueDate).toISOString().split("T")[0]}
             </span>
           )}
         </div>
@@ -155,17 +169,21 @@ function TaskDetailPage() {
             <p className="app-muted text-[11px] font-semibold uppercase tracking-wide">
               Criada em
             </p>
-            <p className="mt-1">
-              {new Date(task.createdAt).toLocaleString("pt-BR")}
+            <p className="mt-1" suppressHydrationWarning>
+              {mounted
+                ? new Date(task.createdAt).toLocaleString("pt-BR")
+                : new Date(task.createdAt).toISOString()}
             </p>
           </div>
           <div className="rounded-md app-surface p-3">
             <p className="app-muted text-[11px] font-semibold uppercase tracking-wide">
               Concluída em
             </p>
-            <p className="mt-1">
+            <p className="mt-1" suppressHydrationWarning>
               {task.completedAt
-                ? new Date(task.completedAt).toLocaleString("pt-BR")
+                ? mounted
+                  ? new Date(task.completedAt).toLocaleString("pt-BR")
+                  : new Date(task.completedAt).toISOString()
                 : "Ainda não concluída"}
             </p>
           </div>
