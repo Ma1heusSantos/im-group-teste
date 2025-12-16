@@ -10,7 +10,10 @@ import DeleteConfirmModal from "./components/DeleteConfirmModal";
 import Toast from "./components/Toast";
 
 function App() {
-  const [tasks, setTasks] = useState<Task[]>(() => getTasks());
+  const [tasks, setTasks] = useState<Task[]>(() => {
+    if (typeof window === "undefined") return [];
+    return getTasks();
+  });
   const [search, setSearch] = useState("");
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [statusFilter, setStatusFilter] = useState<
